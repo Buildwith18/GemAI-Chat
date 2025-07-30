@@ -91,7 +91,6 @@ Body:
   "question": "What is Django?"
 }
 
-
 Response:
 
 {
@@ -115,4 +114,5 @@ Response:
 
 🙋‍♂️ Author
 Made with 💙 by Yugant Trivedi
+
 ```
