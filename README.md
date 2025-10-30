@@ -1,338 +1,194 @@
-#GemAI-Chat
+<div align="center">
 
-# Smart Conversations, Powered by Django × Google Generative AI
+# GemAI‑Chat — Conversational AI Assistant Built with Modern LLMs ✨
 
-A robust Django-based chatbot backend that integrates with Google's Generative AI models, featuring automatic model discovery, intelligent fallback mechanisms, and comprehensive error handling.
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Node](https://img.shields.io/badge/Node-18%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Django](https://img.shields.io/badge/Django-5.x-092E20?logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![Build](https://img.shields.io/badge/Build-GitHub%20Actions-2088FF?logo=github-actions&logoColor=white)](https://github.com/)
 
-## Features
+AI‑powered, context‑aware chat with a clean UI, robust backend, and pluggable LLM providers.
 
-- **Automatic Model Discovery**: Dynamically selects the best available Google AI model on startup
-- **Smart Fallback System**: Uses environment-configured fallback models when auto-discovery fails
-- **REST API Integration**: Reliable REST API implementation instead of SDK dependencies
-- **Comprehensive Error Handling**: Graceful handling of model unavailability and API errors
-- **Chat History Management**: Persistent chat sessions with user and AI message storage
-- **Health Monitoring**: Built-in health check endpoints for system monitoring
-- **Model Testing Tools**: Management commands for testing AI integration
+</div>
 
-## Tech Stack
+---
 
-### Frontend
+### Overview
 
-- **React.js** - Modern JavaScript library for building user interfaces
-- **TypeScript** - Typed superset of JavaScript for better development experience
-- **Tailwind CSS** - Utility-first CSS framework for rapid UI development
-- **Vite** - Fast build tool and development server
+GemAI‑Chat is an end‑to‑end conversational AI assistant designed for fast, reliable, and context‑aware interactions. It combines a modern React + TypeScript frontend with a production‑ready Django REST API that integrates with cutting‑edge language models (e.g., Google Generative AI, OpenAI, or other providers). The system handles session history, smart model selection/fallbacks, and robust error handling so you can focus on building great AI experiences.
 
-### Backend
+Why it matters:
 
-- **Django** - High-level Python web framework
-- **Django REST Framework** - Powerful toolkit for building Web APIs
-- **Python 3.8+** - Programming language
+- Turning raw LLMs into a delightful product requires UX, memory, reliability, and guardrails.
+- GemAI‑Chat gives you a cohesive stack and patterns to ship AI features quickly and safely.
 
-### Database
+---
 
-- **MySQL** - Relational database management system
-- **SQLite** - Lightweight database for development (optional)
+### Key Features
 
-### AI Integration
+- **Context‑aware conversations**: Maintain session history and user context for coherent, multi‑turn dialogue.
+- **Pluggable LLM providers**: Works with Google Generative AI today; can extend to OpenAI, Anthropic, etc.
+- **Automatic model discovery + fallback**: Picks the best available model and gracefully degrades on failures.
+- **Streaming and typing indicators**: Smooth UX with live tokens and visual feedback. (planned)
+- **Prompt templates + tools**: Reusable prompts, retrieval hooks, and tool execution. (planned)
+- **Chat persistence**: Store messages, sessions, and metadata with export/clear actions.
+- **Role‑based replies**: System, user, assistant roles for safer prompt orchestration.
+- **Observability**: Health checks, structured logs, and test utilities for AI integration.
+- **Rate limiting & guardrails**: Basic protections with room to extend for policy enforcement. (planned)
+- **Multi‑modal support**: Images and files as inputs for richer understanding. (planned)
 
-- **Google Generative AI** - Google's AI models for content generation
-- **REST API** - Direct API integration for reliable AI communication
+---
 
-### Development Tools
+### Demo / Screenshots
 
-- **Git** - Version control system
-- **pip** - Python package manager
-- **npm** - Node.js package manager
+![AI Reply](img/AI_Reply.png)
+_AI response rendered in the chat thread with context retention_
 
-## Prerequisites
+![Chat Interface](img/Chat_Interface.jpeg)
+_Modern, responsive chat interface with message bubbles and typing indicator_
 
-- Python 3.8+
-- Node.js 16+
-- Django 4.0+
-- MySQL 8.0+
-- Google AI API Key
+---
 
-## Installation
+### Tech Stack
 
-1. **Clone the repository**
+- **Frontend**: React 18, TypeScript, Vite, Tailwind CSS
+- **Backend**: Django 5, Django REST Framework, Python 3.10+
+- **AI Providers**: Google Generative AI (current), OpenAI/LangChain (optional/extendable)
+- **Database**: SQLite (dev), MySQL/PostgreSQL (prod‑ready)
+- **Tooling**: npm, pip, GitHub Actions, ESLint/TypeScript
 
-   ```bash
-   git clone <repository-url>
-   cd chatbot-backend
-   ```
+---
 
-2. **Create virtual environment**
+### Architecture
 
-   ```bash
-   python -m venv env
-   source env/bin/activate  # On Windows: env\Scripts\activate
-   ```
-
-3. **Install dependencies**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Set up environment variables**
-   Create a `.env` file in the project root:
-
-   ```bash
-   GOOGLE_API_KEY=your_google_ai_api_key_here
-   FALLBACK_MODEL=gemini-1.5-flash-001
-   SECRET_KEY=your_django_secret_key
-   DEBUG=True
-   ```
-
-5. **Run database migrations**
-
-   ```bash
-   python manage.py migrate
-   ```
-
-6. **Start the development server**
-   ```bash
-   python manage.py runserver
-   ```
-
-## API Endpoints
-
-### Chat Endpoints
-
-**POST /chatbot/reply/**
-Send a message to the chatbot and receive an AI response.
-
-Request body:
-
-```json
-{
-  "prompt": "What is artificial intelligence?",
-  "user_id": "user123",
-  "session_id": "session456"
-}
+```
+User Input → API (Django REST) → LLM Provider (Google GenAI/OpenAI) →
+Reply Post‑Processing (formatting, guardrails) → Persistence (DB) → UI Render (React)
 ```
 
-Response:
+Core building blocks:
 
-```json
-{
-  "reply": "Artificial intelligence (AI) is...",
-  "selected_model": "gemini-1.5-flash-001"
-}
-```
+- Request validation → model selection → prompt assembly → provider call → response shaping → storage → stream/update UI.
 
-**GET /chatbot/history/**
-Retrieve chat history for a user and session.
+---
 
-Query parameters:
+### Installation
 
-- `user_id`: User identifier
-- `session_id`: Session identifier
+Prerequisites:
 
-**POST /chatbot/clear/**
-Clear chat messages for a specific user and session.
+- Python 3.10+
+- Node.js 18+
+- A Google Generative AI or other LLM API key
 
-**GET /chatbot/sessions/**
-Get all chat sessions for a user.
-
-### System Endpoints
-
-**GET /health/**
-Health check endpoint that returns system status and selected AI model.
-
-## Configuration
-
-### Environment Variables
-
-| Variable         | Description                  | Default                |
-| ---------------- | ---------------------------- | ---------------------- |
-| `GOOGLE_API_KEY` | Google AI API key (required) | -                      |
-| `FALLBACK_MODEL` | Fallback model name          | `gemini-1.5-flash-001` |
-| `SECRET_KEY`     | Django secret key            | -                      |
-| `DEBUG`          | Debug mode                   | `False`                |
-
-### Model Selection
-
-The system automatically selects the best available model based on:
-
-- Support for `generateContent` method
-- Model type (prefers Gemini models)
-- Version specificity (prefers numbered versions like `001`)
-- Stability (avoids experimental models)
-
-## Testing
-
-### Verify AI Integration
-
-Test your Google AI setup:
+Clone the repository:
 
 ```bash
-python verify_gemini_setup.py
+git clone <your-repo-url>
+cd GemAI-Chat
 ```
 
-### Django Management Commands
-
-Test AI integration through Django:
+Backend (Django):
 
 ```bash
-python manage.py test_gemini --test-generation
+python -m venv env
+./env/Scripts/activate  # Windows PowerShell
+pip install -r requirements.txt  # if provided; else install Django/DRF
+python backend/manage.py migrate
 ```
 
-List available models:
+Environment (example):
 
 ```bash
-python manage.py test_gemini
+# .env
+GOOGLE_API_KEY=your_key_here
+FALLBACK_MODEL=gemini-1.5-flash-001
+SECRET_KEY=your_django_secret
+DEBUG=True
 ```
 
-### Health Check
-
-Test system health:
+Frontend (React):
 
 ```bash
-curl http://localhost:8000/health/
+npm install
+npm run dev
 ```
 
-## Demo Screenshots
+---
 
-### Chat Interface
+### Usage
 
-![Chat Interface](screenshots/chat-interface.png)
-_Main chat interface showing conversation between user and AI_
+Run the backend:
 
-### API Response
+```bash
+python backend/manage.py runserver  # http://localhost:8000
+```
 
-![API Response](screenshots/api-response.png)
-_Example API response showing AI-generated content_
+Run the frontend:
 
-### Health Check
+```bash
+npm run dev  # http://localhost:5173 (Vite default)
+```
 
-![Health Check](screenshots/health-check.png)
-_System health check showing selected model and database status_
+Example API call:
 
-### Model Selection
+```bash
+curl -X POST http://localhost:8000/chatbot/reply/ \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Explain retrieval augmented generation in 2 sentences.", "user_id": "u1", "session_id": "s1"}'
+```
 
-![Model Selection](screenshots/model-selection.png)
-_Startup logs showing automatic model discovery and selection_
+---
 
-## Project Structure
+### Project Structure (simplified)
 
 ```
 backend/
-├── chatbot/
-│   ├── management/
-│   │   └── commands/
-│   │       └── test_gemini.py
-│   ├── migrations/
-│   ├── models.py
-│   ├── views.py
-│   └── urls.py
-├── ai_chatbot/
-│   ├── settings.py
-│   └── urls.py
-├── manage.py
-└── db.sqlite3
+  ai_chatbot/           # Django project
+  chatbot/              # Chat app, views, models, routes
+  manage.py
+src/                    # React + TypeScript frontend
+img/                    # Screenshots
 ```
 
-## Error Handling
+---
 
-The system includes comprehensive error handling for:
+### Roadmap
 
-- **Model Unavailability**: Automatic fallback to configured models
-- **API Rate Limits**: Graceful degradation with informative error messages
-- **Network Issues**: Timeout handling and retry mechanisms
-- **Database Errors**: Non-blocking database operations
-- **Invalid Requests**: Proper HTTP status codes and error responses
+- [ ] Streaming responses with Server‑Sent Events/WebSockets
+- [ ] Multi‑provider router (OpenAI, Anthropic, Azure OpenAI)
+- [ ] Retrieval‑Augmented Generation (RAG) with vector search
+- [ ] Prompt library and evaluation harness
+- [ ] Content safety and policy guardrails
+- [ ] Fine‑tuning hooks and adapters
+- [ ] Dark mode and accessibility polish
 
-## Production Deployment
+---
 
-### Security Considerations
+### Contributing
 
-- Use environment-specific API keys
-- Enable HTTPS in production
-- Configure proper CORS settings
-- Set up API rate limiting
-- Monitor API usage and costs
+Contributions are welcome! To get started:
 
-### Performance Optimization
+1. Fork the repo and create a feature branch.
+2. Make your changes with clear commits and tests where relevant.
+3. Run linters/formatters; ensure the app starts locally.
+4. Open a pull request with a concise description and screenshots if UI‑related.
 
-- Implement response caching
-- Use connection pooling
-- Monitor database performance
-- Set up logging and monitoring
-- Configure load balancing
+Please follow conventional commit messages where possible and be kind in reviews 💙.
 
-### Environment Setup
+---
 
-```bash
-# Production environment variables
-GOOGLE_API_KEY=your_production_api_key
-FALLBACK_MODEL=gemini-1.5-flash-001
-DEBUG=False
-SECRET_KEY=your_production_secret_key
-DATABASE_URL=postgresql://user:pass@host:port/db
-```
+### License
 
-## Troubleshooting
+This project is licensed under the **Apache‑2.0** License. See [`LICENSE`](LICENSE).
 
-### Common Issues
+---
 
-**404 Model Not Found**
+### Contact
 
-- Verify API key has proper permissions
-- Check model name in FALLBACK_MODEL
-- Run model discovery test
+- GitHub: `https://github.com/Buildwith18`
+- Gmail: `buildwith.18@gmail.com`
+- Project: `GemAI‑Chat`
 
-**API Key Errors**
-
-- Ensure GOOGLE_API_KEY is set correctly
-- Verify key has Generative Language API access
-- Check key format (starts with AIza...)
-
-**Database Connection Issues**
-
-- Verify database configuration
-- Run migrations: `python manage.py migrate`
-- Check database permissions
-
-### Debug Mode
-
-Enable debug logging:
-
-```python
-# In settings.py
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
-    },
-}
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
-
-## License
-
-This project is licensed under the Apache 2.0 License - see the LICENSE file for details.
-
-## Support
-
-For issues and questions:
-
-- Check the troubleshooting section
-- Run the verification scripts
-- Review Django logs for error details
-- Consult Google AI documentation for API issues
+If you use or like this project, consider starring it ⭐ and sharing feedback!
