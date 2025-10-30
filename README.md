@@ -43,11 +43,11 @@ Why it matters:
 
 ### Demo / Screenshots
 
+![Chat Interface](img/Chat_Interface.png)
+_Modern, responsive chat interface with message bubbles and typing indicator_
+
 ![AI Reply](img/AI_Reply.png)
 _AI response rendered in the chat thread with context retention_
-
-![Chat Interface](img/Chat_Interface.jpeg)
-_Modern, responsive chat interface with message bubbles and typing indicator_
 
 ---
 
